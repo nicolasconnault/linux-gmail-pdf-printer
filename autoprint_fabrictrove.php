@@ -110,8 +110,13 @@ if (count($results->getMessages()) == 0) {
     $result = $service->users_messages->modify($user, $message->getId(), $mods);
   }
 
-  echo "Printed invoices: \n";
-  print_r($printed_invoices);
+  if (count($printed_invoices) > 0) {
+    echo "Printed invoices on " . date(DATE_RFC2822) . ": ";
+    foreach ($printed_invoices as $invoice_id) {
+      echo "$invoice_id, ";
+    }
+    echo "\n";
+  }
 }
 
 
@@ -134,5 +139,5 @@ function print_invoice($email, $invoice_number, $user, $service) {
   }
   $file_name = "invoice_{$invoice_number}.pdf";
   file_put_contents("invoices/" . $file_name, $bin);
-  exec("lpr $file_name");
+  exec("lpr invoices/$file_name");
 }
